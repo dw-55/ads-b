@@ -1,0 +1,5 @@
+[
+  { "icao":"A1B2C3", "flight":"UAL123", "lat":37.615, "lon":-122.39, "altitude":30000, "speed":450 },
+  { "icao":"D4E5F6", "flight":"SWA456", "lat":37.77,  "lon":-122.42, "altitude":12000, "speed":320 },
+  { "icao":"G7H8I9", "flight":"DAL789", "lat":37.45,  "lon":-122.16, "altitude":18000, "speed":380 }
+]
