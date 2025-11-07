@@ -4,9 +4,31 @@
   <meta charset="utf-8" />
   <title>ADS-B Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-  <style>html, body, #map { height: 100%; margin: 0; }</style>
+  <style>
+    html, body, #map { height: 100%; margin: 0; }
+    .ui-panel {
+      position: absolute; z-index: 1000;
+      top: 20px; right: 20px;
+      background: #fff; padding: 8px; margin: 8px;
+      border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,.15);
+      font-family: system-ui, -apple-system, Arial, sans-serif; font-size: 14px;
+    }
+    .ui-panel input[type="range"] { width: 160px; vertical-align: middle; }
+  </style>
 </head>
 <body>
+
+  <!-- UI CONTROLS -->
+  <div class="ui-panel">
+    <label>
+      <input type="checkbox" id="wxToggle" checked>
+      Weather overlay (wind)
+    </label>
+    <br>
+    Opacity:
+    <input type="range" id="wxOpacity" min="0" max="1" step="0.1" value="0.5">
+  </div>
+
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -15,6 +37,25 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(window.map);
+
+    const OWM_KEY = '99e7df36dafa5c53cbf889922f0dc666';
+    const weatherLayer = L.tileLayer(
+      `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${OWM_KEY}`,
+      { opacity: 0.5 }
+    ).addTo(window.map);
+
+    const wxToggle = document.getElementById('wxToggle');
+    const wxOpacity = document.getElementById('wxOpacity');
+
+    wxToggle.addEventListener('change', e => {
+      if (e.target.checked) weatherLayer.addTo(window.map);
+      else window.map.removeLayer(weatherLayer);
+    });
+    wxOpacity.addEventListener('input', e => {
+      weatherLayer.setOpacity(parseFloat(e.target.value));
+    });
   </script>
+
+  <script src="js/map.js"></script>
 </body>
 </html>
